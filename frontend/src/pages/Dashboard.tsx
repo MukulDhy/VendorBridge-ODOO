@@ -46,7 +46,7 @@ export default function Dashboard() {
         subtitle="Here's the snapshot of your procurement pipeline."
         actions={
           (user.role === "PROCUREMENT_OFFICER" || user.role === "ADMIN") && (
-            <Link to="/rfqs/new" className="inline-flex h-10 items-center gap-2 rounded-lg bg-[var(--gradient-primary)] px-4 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-elegant)]">
+            <Link to="/rfqs/new" className="inline-flex h-10 items-center gap-2 rounded-lg bg-primary hover:bg-primary/90 px-4 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-elegant)]">
               <Plus className="h-4 w-4" /> New RFQ
             </Link>
           )

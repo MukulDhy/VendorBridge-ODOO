@@ -24,7 +24,7 @@ export default function VendorsPage() {
         title="Vendors"
         subtitle="Manage your supplier directory and performance."
         actions={
-          <button onClick={() => setOpen(true)} className="inline-flex h-10 items-center gap-2 rounded-lg bg-[var(--gradient-primary)] px-4 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-elegant)]">
+          <button onClick={() => setOpen(true)} className="inline-flex h-10 items-center gap-2 rounded-lg bg-primary hover:bg-primary/90 px-4 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-elegant)]">
             <Plus className="h-4 w-4" /> Add vendor
           </button>
         }
@@ -112,7 +112,7 @@ function AddVendorModal({ onClose, onCreate }: { onClose: () => void; onCreate: 
           </div>
           <div className="sm:col-span-2 mt-2 flex justify-end gap-2">
             <button type="button" onClick={onClose} className="h-10 rounded-lg border border-border px-4 text-sm font-medium">Cancel</button>
-            <button className="h-10 rounded-lg bg-[var(--gradient-primary)] px-4 text-sm font-semibold text-primary-foreground">Create vendor</button>
+            <button className="h-10 rounded-lg bg-primary hover:bg-primary/90 px-4 text-sm font-semibold text-primary-foreground">Create vendor</button>
           </div>
         </form>
       </div>

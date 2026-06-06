@@ -20,7 +20,7 @@ export default function SignupPage() {
     <div className="flex min-h-screen items-center justify-center bg-[var(--gradient-subtle)] px-4">
       <div className="w-full max-w-md rounded-2xl border border-border bg-card p-8 shadow-[var(--shadow-card)]">
         <div className="mb-6 flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[var(--gradient-primary)] text-primary-foreground">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground">
             <Building2 className="h-5 w-5" />
           </div>
           <span className="text-lg font-semibold tracking-tight text-foreground">VendorBridge</span>
@@ -45,7 +45,7 @@ export default function SignupPage() {
             <option value="VENDOR">Vendor</option>
           </select>
           {error && <p className="text-sm text-destructive">{error}</p>}
-          <button className="h-11 w-full rounded-lg bg-[var(--gradient-primary)] text-sm font-semibold text-primary-foreground shadow-[var(--shadow-elegant)]">
+          <button className="h-11 w-full rounded-lg bg-primary hover:bg-primary/90 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-elegant)]">
             Create account
           </button>
         </form>

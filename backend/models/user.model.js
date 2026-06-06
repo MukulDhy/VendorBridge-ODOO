@@ -70,10 +70,13 @@ const userSchema = new Schema(
       type: String,
       required: [true, "Role is required"],
       enum: {
-        values: ["admin", "po", "manager","vendor"],
-        message: 'Role must be one of: "admin", "po", "manager", "vendor"',
+        values: ["admin", "procurement_officer", "manager","vendor"],
+        message: 'Role must be one of: "admin", "procurement_officer", "manager", "vendor"',
+        // values: ["admin", "po", "manager","vendor"],
+        // message: 'Role must be one of: "admin", "po", "manager", "vendor"',
       },
-      default: "po",
+      default: "procurement_officer",
+      // default: "po",
     },
 
     // ── Contact ───────────────────────────────────────────────────────────

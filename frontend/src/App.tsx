@@ -11,6 +11,8 @@ import VendorsPage from "./pages/Vendors";
 import RFQsPage from "./pages/RFQs";
 import RFQCreatePage from "./pages/RFQCreate";
 import RFQDetail from "./pages/RFQDetail";
+import POCreatePage from "./pages/POCreate";
+import PODetailPage from "./pages/PODetail";
 import ApprovalsPage from "./pages/Approvals";
 import PurchaseOrdersPage from "./pages/PurchaseOrders";
 import InvoicesPage from "./pages/Invoices";
@@ -40,7 +42,12 @@ export default function App() {
             <Route path="/rfqs/:id" element={<ProtectedRoute roles={["ADMIN", "PROCUREMENT_OFFICER", "MANAGER"]}><RFQDetail /></ProtectedRoute>} />
 
             <Route path="/approvals" element={<ProtectedRoute roles={["ADMIN", "MANAGER"]}><ApprovalsPage /></ProtectedRoute>} />
-            <Route path="/purchase-orders" element={<ProtectedRoute roles={["ADMIN", "PROCUREMENT_OFFICER", "MANAGER"]}><PurchaseOrdersPage /></ProtectedRoute>} />
+            
+            <Route path="/pos" element={<ProtectedRoute roles={["ADMIN", "PROCUREMENT_OFFICER", "MANAGER"]}><PurchaseOrdersPage /></ProtectedRoute>} />
+            <Route path="/pos/create/:quotationId" element={<ProtectedRoute roles={["ADMIN", "PROCUREMENT_OFFICER"]}><POCreatePage /></ProtectedRoute>} />
+            <Route path="/pos/:id" element={<ProtectedRoute roles={["ADMIN", "PROCUREMENT_OFFICER", "MANAGER"]}><PODetailPage /></ProtectedRoute>} />
+            <Route path="/pos/:id/edit" element={<ProtectedRoute roles={["ADMIN", "PROCUREMENT_OFFICER"]}><POCreatePage /></ProtectedRoute>} />
+
             <Route path="/invoices" element={<InvoicesPage />} />
             <Route path="/reports" element={<ProtectedRoute roles={["ADMIN", "PROCUREMENT_OFFICER", "MANAGER"]}><ReportsPage /></ProtectedRoute>} />
             <Route path="/notifications" element={<NotificationsPage />} />

@@ -8,6 +8,9 @@ const slice = createSlice({
   name: "purchaseOrders",
   initialState,
   reducers: {
+    setPOs(state, action: PayloadAction<PurchaseOrder[]>) {
+      state.items = action.payload;
+    },
     createPO: {
       reducer(state, action: PayloadAction<PurchaseOrder>) {
         state.items.unshift(action.payload);
@@ -29,8 +32,11 @@ const slice = createSlice({
       const p = state.items.find((x) => x.id === action.payload.id);
       if (p) p.status = action.payload.status;
     },
+    deletePO(state, action: PayloadAction<string>) {
+      state.items = state.items.filter((x) => x.id !== action.payload);
+    },
   },
 });
 
-export const { createPO, setPOStatus } = slice.actions;
+export const { setPOs, createPO, setPOStatus, deletePO } = slice.actions;
 export default slice.reducer;

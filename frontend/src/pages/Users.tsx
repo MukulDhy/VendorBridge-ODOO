@@ -17,7 +17,7 @@ export default function UsersPage() {
         title="Users"
         subtitle="Manage who can access what across your workspace."
         actions={
-          <button onClick={() => setOpen(true)} className="inline-flex h-10 items-center gap-2 rounded-lg bg-[var(--gradient-primary)] px-4 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-elegant)]">
+          <button onClick={() => setOpen(true)} className="inline-flex h-10 items-center gap-2 rounded-lg bg-primary hover:bg-primary/90 px-4 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-elegant)]">
             <Plus className="h-4 w-4" /> Invite user
           </button>
         }
@@ -68,7 +68,7 @@ function Invite({ onClose, onCreate }: { onClose: () => void; onCreate: (p: { na
           </select>
           <div className="flex justify-end gap-2 pt-2">
             <button type="button" onClick={onClose} className="h-10 rounded-lg border border-border px-4 text-sm">Cancel</button>
-            <button className="h-10 rounded-lg bg-[var(--gradient-primary)] px-4 text-sm font-semibold text-primary-foreground">Invite</button>
+            <button className="h-10 rounded-lg bg-primary hover:bg-primary/90 px-4 text-sm font-semibold text-primary-foreground">Invite</button>
           </div>
         </form>
       </div>

@@ -31,7 +31,7 @@ export default function LoginPage() {
 
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
-      <div className="relative hidden flex-col justify-between overflow-hidden bg-[var(--gradient-primary)] p-12 text-primary-foreground lg:flex">
+      <div className="relative hidden flex-col justify-between overflow-hidden bg-primary hover:bg-primary/90 p-12 text-primary-foreground lg:flex">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/15 backdrop-blur">
             <Building2 className="h-5 w-5" />
@@ -61,7 +61,7 @@ export default function LoginPage() {
         <div className="w-full max-w-md">
           <div className="mb-8 lg:hidden">
             <div className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[var(--gradient-primary)] text-primary-foreground">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground">
                 <Building2 className="h-5 w-5" />
               </div>
               <span className="text-lg font-semibold tracking-tight text-foreground">VendorBridge</span>
@@ -94,7 +94,7 @@ export default function LoginPage() {
               </div>
             </div>
             {error && <p className="text-sm text-destructive">{error}</p>}
-            <button type="submit" className="h-11 w-full rounded-lg bg-[var(--gradient-primary)] text-sm font-semibold text-primary-foreground shadow-[var(--shadow-elegant)] transition hover:opacity-95">
+            <button type="submit" className="h-11 w-full rounded-lg bg-primary hover:bg-primary/90 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-elegant)] transition hover:opacity-95">
               Sign in
             </button>
             <p className="text-center text-sm text-muted-foreground">

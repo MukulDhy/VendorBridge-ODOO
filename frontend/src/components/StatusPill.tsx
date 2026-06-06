@@ -13,6 +13,7 @@ const tones: Record<string, string> = {
   Submitted: "bg-blue-500/10 text-blue-700 border-blue-500/20",
   Shortlisted: "bg-violet-500/10 text-violet-700 border-violet-500/20",
   Issued: "bg-blue-500/10 text-blue-700 border-blue-500/20",
+  Invoiced: "bg-blue-500/10 text-blue-700 border-blue-500/20",
   Delivered: "bg-emerald-500/10 text-emerald-700 border-emerald-500/20",
   Paid: "bg-emerald-500/10 text-emerald-700 border-emerald-500/20",
   Overdue: "bg-red-500/10 text-red-700 border-red-500/20",

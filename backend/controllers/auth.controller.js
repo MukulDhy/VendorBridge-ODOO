@@ -31,7 +31,7 @@ import logger from "../utils/logger.js";
 const zodEmail = z.string().email();
 
 const formatZodErrors = (error) =>
-  error.errors.map((e) => ({
+  error.issues.map((e) => ({
     field: e.path.join("."),
     message: e.message,
   }));

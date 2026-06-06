@@ -11,6 +11,8 @@ import logger from "./utils/logger.js";
 import compression from "compression";
 import errorHandler from "./middlewares/error.js";
 import authRouter from "./routes/auth.routes.js";
+import purchaseOrderRouter from "./routes/purchaseOrder.routes.js";
+import rfqRouter from "./routes/rfq.routes.js";
 // import {redis,RedisConnection} from "./scale/redis.js";
 // import webSocketService from "./services/websocket.service.js";
 // import ProFillerathonRouter from "./routes/ProFillerthon.routes.js";
@@ -57,6 +59,8 @@ app.get("/", (req, res) => {
 
 // Routes - Default Made for Authentication, can be removed if not needed
 app.use("/api/user", authRouter);
+app.use("/api/po", purchaseOrderRouter);
+app.use("/api/rfq", rfqRouter);
 
 // 404 handler
 app.use((req, res, next) => {

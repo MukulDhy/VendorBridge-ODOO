@@ -40,7 +40,7 @@ export default function VendorRFQs() {
                 {myQuote ? (
                   <p className="text-xs text-emerald-600 font-medium">✓ You've submitted a quotation ({myQuote.status})</p>
                 ) : (
-                  <button onClick={() => setOpen(r)} className="inline-flex items-center gap-2 rounded-lg bg-[var(--gradient-primary)] px-4 py-2 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-elegant)]">
+                  <button onClick={() => setOpen(r)} className="inline-flex items-center gap-2 rounded-lg bg-primary hover:bg-primary/90 px-4 py-2 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-elegant)]">
                     <Send className="h-4 w-4" /> Submit quotation
                   </button>
                 )}
@@ -87,7 +87,7 @@ function QuoteModal({ rfq, onClose, onSubmit }: { rfq: RFQ; onClose: () => void;
           </div>
           <div className="flex justify-end gap-2 pt-2">
             <button type="button" onClick={onClose} className="h-10 rounded-lg border border-border px-4 text-sm">Cancel</button>
-            <button className="h-10 rounded-lg bg-[var(--gradient-primary)] px-4 text-sm font-semibold text-primary-foreground">Submit</button>
+            <button className="h-10 rounded-lg bg-primary hover:bg-primary/90 px-4 text-sm font-semibold text-primary-foreground">Submit</button>
           </div>
         </form>
       </div>

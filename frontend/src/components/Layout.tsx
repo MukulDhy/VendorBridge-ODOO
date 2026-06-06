@@ -19,7 +19,7 @@ const NAV: NavItem[] = [
   { to: "/vendor/orders", label: "Purchase Orders", icon: ShoppingCart, roles: ["VENDOR"] },
   { to: "/vendors", label: "Vendors", icon: Building2, roles: ["ADMIN", "PROCUREMENT_OFFICER"] },
   { to: "/approvals", label: "Approvals", icon: CheckCircle2, roles: ["MANAGER", "ADMIN"] },
-  { to: "/purchase-orders", label: "Purchase Orders", icon: ShoppingCart, roles: ["ADMIN", "PROCUREMENT_OFFICER", "MANAGER"] },
+  { to: "/pos", label: "Purchase Orders", icon: ShoppingCart, roles: ["ADMIN", "PROCUREMENT_OFFICER", "MANAGER"] },
   { to: "/invoices", label: "Invoices", icon: ReceiptText, roles: ["ADMIN", "PROCUREMENT_OFFICER", "MANAGER", "VENDOR"] },
   { to: "/reports", label: "Reports", icon: BarChart3, roles: ["ADMIN", "PROCUREMENT_OFFICER", "MANAGER"] },
   { to: "/activity", label: "Activity Logs", icon: ClipboardList, roles: ["ADMIN"] },
@@ -50,7 +50,7 @@ export default function Layout() {
         }`}
       >
         <div className="flex h-16 items-center gap-2 border-b border-border px-5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[var(--gradient-primary)] text-primary-foreground shadow-[var(--shadow-elegant)]">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground shadow-[var(--shadow-elegant)]">
             <Building2 className="h-5 w-5" />
           </div>
           <div>

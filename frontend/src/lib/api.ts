@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "/api",
+  baseURL: "http://localhost:5002/api",
   timeout: 15000,
 });
 
@@ -11,7 +11,7 @@ api.interceptors.request.use((config) => {
     try {
       const { token } = JSON.parse(stored);
       if (token) config.headers.Authorization = `Bearer ${token}`;
-    } catch {}
+    } catch { }
   }
   return config;
 });

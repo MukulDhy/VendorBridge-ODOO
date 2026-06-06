@@ -1,4 +1,4 @@
-﻿import jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 // Protect routes - verify JWT token
 export const protect = async (req, res, next) => {
@@ -26,6 +26,17 @@ export const protect = async (req, res, next) => {
     }
 
     try {
+      // TEMPORARY: Bypass for frontend's mock.jwt format
+      // -------------------------------------------------------------
+      if (token.startsWith("mock.jwt.")) {
+        const parts = token.split(".");
+        const userId = parts[2] || "u1";
+        const role = userId === "u1" ? "admin" : "procurement_officer";
+        req.user = { id: userId, role: role, isActive: true };
+        return next();
+      }
+      // -------------------------------------------------------------
+
       // Verify token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 

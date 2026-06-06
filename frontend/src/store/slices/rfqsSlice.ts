@@ -8,20 +8,23 @@ const slice = createSlice({
   name: "rfqs",
   initialState,
   reducers: {
+    setRFQs(state, action: PayloadAction<RFQ[]>) {
+      state.items = action.payload;
+    },
     addRFQ: {
       reducer(state, action: PayloadAction<RFQ>) {
         state.items.unshift(action.payload);
       },
-      prepare(payload: Omit<RFQ, "id" | "code" | "createdAt" | "status"> & { status?: RFQ["status"] }) {
-        const id = `r${Date.now()}`;
+      prepare(payload: Partial<RFQ> & Omit<RFQ, "id" | "code" | "createdAt" | "status"> & { status?: RFQ["status"] }) {
+        const id = payload.id || `r${Date.now()}`;
         const seq = String(Math.floor(Math.random() * 900) + 100);
         return {
           payload: {
             ...payload,
             id,
-            code: `RFQ-2026-${seq}`,
+            code: payload.code || `RFQ-2026-${seq}`,
             status: payload.status ?? "Open",
-            createdAt: new Date().toISOString(),
+            createdAt: payload.createdAt || new Date().toISOString(),
           } as RFQ,
         };
       },
@@ -36,5 +39,5 @@ const slice = createSlice({
   },
 });
 
-export const { addRFQ, updateRFQStatus, deleteRFQ } = slice.actions;
+export const { setRFQs, addRFQ, updateRFQStatus, deleteRFQ } = slice.actions;
 export default slice.reducer;

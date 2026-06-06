@@ -1,10 +1,11 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Plus, Search, Calendar, Trash2 } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 import StatusPill from "@/components/StatusPill";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { deleteRFQ } from "@/store/slices/rfqsSlice";
+import { deleteRFQ, setRFQs } from "@/store/slices/rfqsSlice";
+import { api } from "@/lib/api";
 import { format, parseISO } from "date-fns";
 
 export default function RFQsPage() {
@@ -12,6 +13,34 @@ export default function RFQsPage() {
   const dispatch = useAppDispatch();
   const [q, setQ] = useState("");
   const [status, setStatus] = useState("All");
+
+  useEffect(() => {
+    api.get("/rfq").then((res) => {
+      if (res.data.success) {
+        const dbRFQs = res.data.data.map((r: any) => {
+          let quantity = 0;
+          try { 
+            const items = typeof r.items === "string" ? JSON.parse(r.items) : r.items;
+            quantity = Array.isArray(items) ? items.reduce((s: number, i: any) => s + (i.quantity || 0), 0) : 0;
+          } catch(e) {}
+          
+          return {
+            id: r.id,
+            code: r.rfq_title || "RFQ",
+            title: r.description ? (r.description.length > 50 ? r.description.substring(0, 50) + "..." : r.description) : "Custom RFQ",
+            category: "General",
+            description: r.description || "",
+            quantity: quantity,
+            deadline: new Date(r.deadline).toISOString(),
+            status: r.status === "published" ? "Open" : "Draft",
+            assignedVendors: r.assigned_vendors || [],
+            createdAt: new Date(r.created_at).toISOString(),
+          };
+        });
+        dispatch(setRFQs(dbRFQs));
+      }
+    }).catch(console.error);
+  }, [dispatch]);
 
   const filtered = useMemo(() => rfqs.filter((r) =>
     (status === "All" || r.status === status) &&
@@ -24,7 +53,7 @@ export default function RFQsPage() {
         title="Requests for Quotation"
         subtitle="Issue RFQs to vendors and track responses."
         actions={
-          <Link to="/rfqs/new" className="inline-flex h-10 items-center gap-2 rounded-lg bg-[var(--gradient-primary)] px-4 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-elegant)]">
+          <Link to="/rfqs/new" className="inline-flex h-10 items-center gap-2 rounded-lg bg-primary hover:bg-primary/90 px-4 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-elegant)]">
             <Plus className="h-4 w-4" /> New RFQ
           </Link>
         }
