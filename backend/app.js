@@ -11,9 +11,10 @@ import logger from "./utils/logger.js";
 import compression from "compression";
 import errorHandler from "./middlewares/error.js";
 import authRouter from "./routes/auth.routes.js";
+import pool from "./config/pgDb.js"
 // import {redis,RedisConnection} from "./scale/redis.js";
 // import webSocketService from "./services/websocket.service.js";
-// import ProFillerathonRouter from "./routes/ProFillerthon.routes.js";
+// import VendorbridgeathonRouter from "./routes/Vendorbridgethon.routes.js";
 
 // Required for __dirname in ES modules
 import { fileURLToPath } from "url";
@@ -27,7 +28,10 @@ const app = express();
 const server = http.createServer(app);
 
 // Connect to database
-connectDB();
+// connectDB();
+
+
+
 configCloudinary();
 // Middleware
 app.use(express.json({ limit: "50mb" }));
