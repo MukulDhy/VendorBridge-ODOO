@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useNavigate, useLocation } from "react-router-dom";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   LayoutDashboard, FileText, Users, ShoppingCart, ReceiptText, BarChart3,
   Bell, ClipboardList, CheckCircle2, Building2, LogOut, Menu, X, Send, Search,
@@ -8,6 +8,17 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { logout } from "@/store/slices/authSlice";
 import RoleBadge from "./RoleBadge";
 import type { Role } from "@/lib/mockData";
+
+// Fetch Actions
+import { fetchVendors } from "@/store/actions/vendorActions";
+import { fetchRFQs } from "@/store/actions/rfqActions";
+import { fetchQuotations } from "@/store/actions/quotationActions";
+import { fetchApprovals } from "@/store/actions/approvalActions";
+import { fetchPOs } from "@/store/actions/poActions";
+import { fetchInvoices } from "@/store/actions/invoiceActions";
+import { fetchNotifications } from "@/store/actions/notificationActions";
+import { fetchActivityLogs } from "@/store/actions/activityActions";
+import { fetchUsers } from "@/store/actions/userActions";
 
 interface NavItem { to: string; label: string; icon: any; roles: Role[] }
 
@@ -31,10 +42,34 @@ export default function Layout() {
   const navigate = useNavigate();
   const location = useLocation();
   const user = useAppSelector((s) => s.auth.user)!;
-  const notifs = useAppSelector((s) => s.notifications.items.filter((n) => (n.userId === user.id || n.userId === "all") && !n.read));
+  
+  const notifs = useAppSelector((s) => 
+    s.notifications.items.filter((n) => 
+      (n.userId === user.id || n.userId === `u-vendor-${user.vendorId}` || n.userId === "all") && !n.read
+    )
+  );
+  
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const items = useMemo(() => NAV.filter((n) => n.roles.includes(user.role)), [user.role]);
+
+  // Load all app data from backend on login / mount
+  useEffect(() => {
+    if (user) {
+      dispatch(fetchVendors());
+      dispatch(fetchRFQs());
+      dispatch(fetchQuotations());
+      dispatch(fetchApprovals());
+      dispatch(fetchPOs());
+      dispatch(fetchInvoices());
+      dispatch(fetchNotifications());
+      
+      if (user.role === "ADMIN") {
+        dispatch(fetchActivityLogs());
+        dispatch(fetchUsers());
+      }
+    }
+  }, [dispatch, user]);
 
   const handleLogout = () => {
     dispatch(logout());

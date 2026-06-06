@@ -1,4 +1,5 @@
-﻿import jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
+import { findUserById, findUserByEmail } from "../repository/user.repository.js";
 
 // Protect routes - verify JWT token
 export const protect = async (req, res, next) => {
@@ -13,7 +14,7 @@ export const protect = async (req, res, next) => {
       token = req.headers.authorization.split(" ")[1];
     }
     // Check for token in cookies
-    else if (req.cookies.token) {
+    else if (req.cookies && req.cookies.token) {
       token = req.cookies.token;
     }
 
@@ -30,8 +31,7 @@ export const protect = async (req, res, next) => {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
       // Get user from token
-      let user;
-      // const user = await User.findById(decoded.id);
+      const user = await findUserById(decoded.id);
 
       if (!user) {
         return res.status(401).json({
@@ -102,7 +102,7 @@ export const optionalAuth = async (req, res, next) => {
       token = req.headers.authorization.split(" ")[1];
     }
     // Check for token in cookies
-    else if (req.cookies.token) {
+    else if (req.cookies && req.cookies.token) {
       token = req.cookies.token;
     }
 
@@ -112,8 +112,7 @@ export const optionalAuth = async (req, res, next) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         // Get user from token
-        let user;
-        // const user = await User.findById(decoded.userId);
+        const user = await findUserById(decoded.id);
 
         if (user && user.isActive) {
           req.user = user;
@@ -141,10 +140,10 @@ export const adminSpecialAuth = async (req, res, next) => {
         message: "Unauthorized: Missing admin credentials",
       });
     }
-    let adminUser;
-    // const adminUser = await User.findOne({ email: email, role: "admin" });
+    
+    const adminUser = await findUserByEmail(email);
 
-    if (!adminUser) {
+    if (!adminUser || adminUser.role !== "ADMIN") {
       return res.status(401).json({
         success: false,
         message: "Unauthorized: Invalid admin credentials",
