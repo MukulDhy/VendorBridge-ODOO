@@ -1,35 +1,57 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { seedVendors, type Vendor } from "@/lib/mockData";
+import { createSlice } from "@reduxjs/toolkit";
+import type { Vendor } from "@/lib/mockData";
+import {
+  fetchVendors,
+  addVendor,
+  updateVendor,
+  deleteVendor,
+  setStatus,
+} from "../actions/vendorActions";
 
-interface State { items: Vendor[] }
-const initialState: State = { items: seedVendors };
+interface State {
+  items: Vendor[];
+  loading: boolean;
+  error: string | null;
+}
+const initialState: State = {
+  items: [],
+  loading: false,
+  error: null,
+};
 
 const slice = createSlice({
   name: "vendors",
   initialState,
-  reducers: {
-    addVendor(state, action: PayloadAction<Omit<Vendor, "id" | "createdAt" | "rating" | "onTime">>) {
-      state.items.unshift({
-        ...action.payload,
-        id: `v${Date.now()}`,
-        createdAt: new Date().toISOString(),
-        rating: 4.0,
-        onTime: 90,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchVendors.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchVendors.fulfilled, (state, action) => {
+        state.loading = false;
+        state.items = action.payload;
+      })
+      .addCase(fetchVendors.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(addVendor.fulfilled, (state, action) => {
+        state.items.unshift(action.payload);
+      })
+      .addCase(updateVendor.fulfilled, (state, action) => {
+        const i = state.items.findIndex((v) => v.id === action.payload.id);
+        if (i >= 0) state.items[i] = action.payload;
+      })
+      .addCase(deleteVendor.fulfilled, (state, action) => {
+        state.items = state.items.filter((v) => v.id !== action.payload);
+      })
+      .addCase(setStatus.fulfilled, (state, action) => {
+        const v = state.items.find((x) => x.id === action.payload.id);
+        if (v) v.status = action.payload.status;
       });
-    },
-    updateVendor(state, action: PayloadAction<Vendor>) {
-      const i = state.items.findIndex((v) => v.id === action.payload.id);
-      if (i >= 0) state.items[i] = action.payload;
-    },
-    deleteVendor(state, action: PayloadAction<string>) {
-      state.items = state.items.filter((v) => v.id !== action.payload);
-    },
-    setStatus(state, action: PayloadAction<{ id: string; status: Vendor["status"] }>) {
-      const v = state.items.find((x) => x.id === action.payload.id);
-      if (v) v.status = action.payload.status;
-    },
   },
 });
 
-export const { addVendor, updateVendor, deleteVendor, setStatus } = slice.actions;
+export { addVendor, deleteVendor, setStatus };
 export default slice.reducer;

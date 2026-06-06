@@ -1,40 +1,52 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { seedRFQs, type RFQ } from "@/lib/mockData";
+import { createSlice } from "@reduxjs/toolkit";
+import type { RFQ } from "@/lib/mockData";
+import {
+  fetchRFQs,
+  addRFQ,
+  updateRFQStatus,
+  deleteRFQ,
+} from "../actions/rfqActions";
 
-interface State { items: RFQ[] }
-const initialState: State = { items: seedRFQs };
+interface State {
+  items: RFQ[];
+  loading: boolean;
+  error: string | null;
+}
+const initialState: State = {
+  items: [],
+  loading: false,
+  error: null,
+};
 
 const slice = createSlice({
   name: "rfqs",
   initialState,
-  reducers: {
-    addRFQ: {
-      reducer(state, action: PayloadAction<RFQ>) {
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchRFQs.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchRFQs.fulfilled, (state, action) => {
+        state.loading = false;
+        state.items = action.payload;
+      })
+      .addCase(fetchRFQs.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(addRFQ.fulfilled, (state, action) => {
         state.items.unshift(action.payload);
-      },
-      prepare(payload: Omit<RFQ, "id" | "code" | "createdAt" | "status"> & { status?: RFQ["status"] }) {
-        const id = `r${Date.now()}`;
-        const seq = String(Math.floor(Math.random() * 900) + 100);
-        return {
-          payload: {
-            ...payload,
-            id,
-            code: `RFQ-2026-${seq}`,
-            status: payload.status ?? "Open",
-            createdAt: new Date().toISOString(),
-          } as RFQ,
-        };
-      },
-    },
-    updateRFQStatus(state, action: PayloadAction<{ id: string; status: RFQ["status"] }>) {
-      const r = state.items.find((x) => x.id === action.payload.id);
-      if (r) r.status = action.payload.status;
-    },
-    deleteRFQ(state, action: PayloadAction<string>) {
-      state.items = state.items.filter((r) => r.id !== action.payload);
-    },
+      })
+      .addCase(updateRFQStatus.fulfilled, (state, action) => {
+        const r = state.items.find((x) => x.id === action.payload.id);
+        if (r) r.status = action.payload.status;
+      })
+      .addCase(deleteRFQ.fulfilled, (state, action) => {
+        state.items = state.items.filter((r) => r.id !== action.payload);
+      });
   },
 });
 
-export const { addRFQ, updateRFQStatus, deleteRFQ } = slice.actions;
+export { addRFQ, deleteRFQ, updateRFQStatus };
 export default slice.reducer;

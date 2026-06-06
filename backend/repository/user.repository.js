@@ -68,6 +68,7 @@ function toUser(row) {
     resetPasswordOtp: row.reset_password_otp,
     resetPasswordExpires: row.reset_password_expires,
     resetPasswordToken: row.reset_password_token,
+    vendorId: row.vendor_id,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
@@ -81,7 +82,7 @@ function toUser(row) {
  */
 export async function findUserByEmail(email) {
   const { rows } = await pool.query(
-    `SELECT id, name, email, role, phone, profile_picture,
+    `SELECT id, name, email, role, phone, profile_picture, vendor_id,
             is_email_verified, is_active, profile_complete,
             last_login, created_at, updated_at
      FROM users WHERE email = $1`,
@@ -107,7 +108,7 @@ export async function findUserByEmailWithPassword(email) {
  */
 export async function findUserById(id) {
   const { rows } = await pool.query(
-    `SELECT id, name, email, role, phone, profile_picture,
+    `SELECT id, name, email, role, phone, profile_picture, vendor_id,
             is_email_verified, is_active, profile_complete,
             last_login, created_at, updated_at
      FROM users WHERE id = $1`,
@@ -173,10 +174,17 @@ export async function createUser(data) {
   const hashed = await bcrypt.hash(data.password, 12);
 
   const { rows } = await pool.query(
-    `INSERT INTO users (name, email, password, role, phone, is_email_verified)
-     VALUES ($1, $2, $3, $4, $5, FALSE)
+    `INSERT INTO users (name, email, password, role, phone, vendor_id, is_email_verified)
+     VALUES ($1, $2, $3, $4, $5, $6, FALSE)
      RETURNING *`,
-    [data.name, data.email, hashed, data.role ?? "user", data.phone ?? null]
+    [
+      data.name,
+      data.email,
+      hashed,
+      data.role ?? "PROCUREMENT_OFFICER",
+      data.phone ?? null,
+      data.vendorId || data.vendor_id || null
+    ]
   );
   return toUser(rows[0]);
 }
@@ -214,6 +222,7 @@ export async function updateUser(id, fields) {
     phone: "phone",
     profilePicture: "profile_picture",
     role: "role",
+    vendorId: "vendor_id",
   };
 
   const setClauses = [];

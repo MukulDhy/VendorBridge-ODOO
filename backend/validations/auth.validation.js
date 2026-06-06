@@ -25,8 +25,8 @@ export const registerSchema = z.object({
 
   password: passwordSchema,
 
-  role: z.enum(["brand", "influencer"], {
-    errorMap: () => ({ message: 'Role must be either "brand" or "influencer"' }),
+  role: z.enum(["ADMIN", "PROCUREMENT_OFFICER", "MANAGER", "VENDOR"], {
+    errorMap: () => ({ message: 'Role must be ADMIN, PROCUREMENT_OFFICER, MANAGER, or VENDOR' }),
   }),
 
   phone: z
