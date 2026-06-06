@@ -1,49 +1,67 @@
 import express from "express";
-// import {
-//   register,
-//   login,
-//   googleAuth,
-//   getMe,
-//   updateProfile,
-//   changePassword,
-//   forgotPassword,
-//   resetPassword,
-//   sendEmailVerification,
-//   verifyEmail,
-//   logout,
-//   deactivateAccount,
-//   verifyingProfile,
-//   verifyOtp,
-//   uploadAvatar,
-//   removeAvatar,
-//   updateSocialLinks,
-// } from "../controllers/auth.controller.js";
-import { protect } from "../middlewares/auth.js";
-import { validateRegistration, validateLogin } from "../utils/validators.js";
+import rateLimit from "express-rate-limit";
+import {
+  register,
+  login,
+  logout,
+  getMe,
+  verifyEmail,
+  verifyEmailCode,
+  resendVerification,
+  forgotPassword,
+  resetPassword,
+  changePassword,
+  refreshToken,
+  checkEmail,
+} from "../controllers/auth.controller.js";
+import { protect, requireEmailVerification } from "../middlewares/auth.js";
 
 const router = express.Router();
 
-// Public routes
-// router.post("/register", validateRegistration, register);
-// router.post("/login", validateLogin, login);
-// router.post("/google", googleAuth);
-// router.post("/forgot-password", forgotPassword);
-// router.post("/verify-otp", verifyOtp);
-// router.post("/reset-password", resetPassword);
-// router.put("/reset-password/:token", resetPassword);
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 30,
+  message: {
+    success: false,
+    message: "Too many attempts — please try again later",
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
-// router.get("/verify-email/:token", verifyEmail);
-// Protected routes (require authentication)
-router.use(protect); // All routes after this middleware require authentication
-// router.get("/verify", verifyingProfile);
-// router.get("/me", getMe);
-// router.put("/profile", updateProfile);
-// router.post("/upload-avatar", uploadAvatar);
-// router.delete("/remove-avatar", removeAvatar);
-// router.put("/social-links", updateSocialLinks);
-// router.put("/change-password", changePassword);
-// router.post("/send-verification", sendEmailVerification);
-// router.post("/logout", logout);
-// router.put("/deactivate", deactivateAccount);
+const strictAuthLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: {
+    success: false,
+    message: "Too many attempts — please try again later",
+  },
+});
+
+// Public
+router.post("/register", authLimiter, register);
+router.post("/login", authLimiter, login);
+router.post("/forgot-password", strictAuthLimiter, forgotPassword);
+router.post("/reset-password", strictAuthLimiter, resetPassword);
+router.post("/verify-email", verifyEmail);
+router.get("/verify-email/:token", verifyEmail);
+router.post("/verify-email-code", authLimiter, verifyEmailCode);
+router.post("/resend-verification", strictAuthLimiter, resendVerification);
+router.post("/refresh-token", refreshToken);
+router.get("/check-email", checkEmail);
+
+// Protected
+router.use(protect);
+router.post("/logout", logout);
+router.get("/me", getMe);
+router.put("/change-password", changePassword);
+
+// Example: route that requires verified email (for collabs, swipe, etc.)
+router.get("/me/verified", requireEmailVerification, (req, res) => {
+  res.json({
+    success: true,
+    data: { user: req.user, message: "Email verified — full access" },
+  });
+});
 
 export default router;
