@@ -1,8 +1,8 @@
 {
-  "name": "ProFiller-mate-server",
+  "name": "Vendorbridge",
   "type": "module",
   "version": "1.0.0",
-  "description": "Backend API for ProFiller mate server",
+  "description": "Backend API for Vendorbridge mate server",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",

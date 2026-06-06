@@ -13,7 +13,7 @@ import errorHandler from "./middlewares/error.js";
 import authRouter from "./routes/auth.routes.js";
 // import {redis,RedisConnection} from "./scale/redis.js";
 // import webSocketService from "./services/websocket.service.js";
-// import ProFillerathonRouter from "./routes/ProFillerthon.routes.js";
+// import VendorbridgeathonRouter from "./routes/Vendorbridgethon.routes.js";
 
 // Required for __dirname in ES modules
 import { fileURLToPath } from "url";
