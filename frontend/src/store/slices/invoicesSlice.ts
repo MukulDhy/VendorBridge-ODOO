@@ -1,36 +1,48 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { seedInvoices, type Invoice } from "@/lib/mockData";
+import { createSlice } from "@reduxjs/toolkit";
+import type { Invoice } from "@/lib/mockData";
+import {
+  fetchInvoices,
+  addInvoice,
+  updateInvoiceStatus,
+} from "../actions/invoiceActions";
 
-interface State { items: Invoice[] }
-const initialState: State = { items: seedInvoices };
+interface State {
+  items: Invoice[];
+  loading: boolean;
+  error: string | null;
+}
+const initialState: State = {
+  items: [],
+  loading: false,
+  error: null,
+};
 
 const slice = createSlice({
   name: "invoices",
   initialState,
-  reducers: {
-    createInvoice: {
-      reducer(state, action: PayloadAction<Invoice>) {
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchInvoices.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchInvoices.fulfilled, (state, action) => {
+        state.loading = false;
+        state.items = action.payload;
+      })
+      .addCase(fetchInvoices.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(addInvoice.fulfilled, (state, action) => {
         state.items.unshift(action.payload);
-      },
-      prepare(payload: Omit<Invoice, "id" | "code" | "createdAt" | "status"> & { status?: Invoice["status"] }) {
-        const seq = String(Math.floor(Math.random() * 900) + 100);
-        return {
-          payload: {
-            ...payload,
-            id: `i${Date.now()}`,
-            code: `INV-2026-${seq}`,
-            status: payload.status ?? "Pending",
-            createdAt: new Date().toISOString(),
-          } as Invoice,
-        };
-      },
-    },
-    setInvoiceStatus(state, action: PayloadAction<{ id: string; status: Invoice["status"] }>) {
-      const i = state.items.find((x) => x.id === action.payload.id);
-      if (i) i.status = action.payload.status;
-    },
+      })
+      .addCase(updateInvoiceStatus.fulfilled, (state, action) => {
+        const i = state.items.find((x) => x.id === action.payload.id);
+        if (i) i.status = action.payload.status;
+      });
   },
 });
 
-export const { createInvoice, setInvoiceStatus } = slice.actions;
+export { addInvoice as createInvoice, updateInvoiceStatus as setInvoiceStatus };
 export default slice.reducer;

@@ -89,6 +89,7 @@ const buildAuthPayload = (user, accessToken, refreshToken) => ({
     profileComplete: user.profileComplete,
     lastLogin: user.lastLogin,
     createdAt: user.createdAt,
+    vendorId: user.vendorId,
   },
   accessToken,
   refreshToken,

@@ -1,39 +1,48 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { seedApprovals, type Approval } from "@/lib/mockData";
+import { createSlice } from "@reduxjs/toolkit";
+import type { Approval } from "@/lib/mockData";
+import {
+  fetchApprovals,
+  submitForApproval,
+  decideApproval,
+} from "../actions/approvalActions";
 
-interface State { items: Approval[] }
-const initialState: State = { items: seedApprovals };
+interface State {
+  items: Approval[];
+  loading: boolean;
+  error: string | null;
+}
+const initialState: State = {
+  items: [],
+  loading: false,
+  error: null,
+};
 
 const slice = createSlice({
   name: "approvals",
   initialState,
-  reducers: {
-    requestApproval: {
-      reducer(state, action: PayloadAction<Approval>) {
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchApprovals.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchApprovals.fulfilled, (state, action) => {
+        state.loading = false;
+        state.items = action.payload;
+      })
+      .addCase(fetchApprovals.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(submitForApproval.fulfilled, (state, action) => {
         state.items.unshift(action.payload);
-      },
-      prepare(payload: Omit<Approval, "id" | "status" | "createdAt">) {
-        return {
-          payload: {
-            ...payload,
-            id: `a${Date.now()}`,
-            status: "Pending" as Approval["status"],
-            createdAt: new Date().toISOString(),
-          } as Approval,
-        };
-      },
-    },
-    decideApproval(state, action: PayloadAction<{ id: string; status: "Approved" | "Rejected"; approverId: string; remarks?: string }>) {
-      const a = state.items.find((x) => x.id === action.payload.id);
-      if (a) {
-        a.status = action.payload.status;
-        a.approverId = action.payload.approverId;
-        a.decidedAt = new Date().toISOString();
-        if (action.payload.remarks) a.remarks = action.payload.remarks;
-      }
-    },
+      })
+      .addCase(decideApproval.fulfilled, (state, action) => {
+        const i = state.items.findIndex((a) => a.id === action.payload.id);
+        if (i >= 0) state.items[i] = action.payload;
+      });
   },
 });
 
-export const { requestApproval, decideApproval } = slice.actions;
+export { submitForApproval as requestApproval, decideApproval };
 export default slice.reducer;

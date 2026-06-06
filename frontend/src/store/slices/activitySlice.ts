@@ -1,8 +1,17 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { seedActivity, type ActivityLog } from "@/lib/mockData";
+import type { ActivityLog } from "@/lib/mockData";
+import { fetchActivityLogs } from "../actions/activityActions";
 
-interface State { items: ActivityLog[] }
-const initialState: State = { items: seedActivity };
+interface State {
+  items: ActivityLog[];
+  loading: boolean;
+  error: string | null;
+}
+const initialState: State = {
+  items: [],
+  loading: false,
+  error: null,
+};
 
 const slice = createSlice({
   name: "activity",
@@ -18,6 +27,20 @@ const slice = createSlice({
         };
       },
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchActivityLogs.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchActivityLogs.fulfilled, (state, action) => {
+        state.loading = false;
+        state.items = action.payload;
+      })
+      .addCase(fetchActivityLogs.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
   },
 });
 

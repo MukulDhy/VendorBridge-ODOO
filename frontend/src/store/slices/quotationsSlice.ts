@@ -1,34 +1,48 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { seedQuotations, type Quotation } from "@/lib/mockData";
+import { createSlice } from "@reduxjs/toolkit";
+import type { Quotation } from "@/lib/mockData";
+import {
+  fetchQuotations,
+  submitQuotation,
+  setQuotationStatus,
+} from "../actions/quotationActions";
 
-interface State { items: Quotation[] }
-const initialState: State = { items: seedQuotations };
+interface State {
+  items: Quotation[];
+  loading: boolean;
+  error: string | null;
+}
+const initialState: State = {
+  items: [],
+  loading: false,
+  error: null,
+};
 
 const slice = createSlice({
   name: "quotations",
   initialState,
-  reducers: {
-    submitQuotation: {
-      reducer(state, action: PayloadAction<Quotation>) {
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchQuotations.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchQuotations.fulfilled, (state, action) => {
+        state.loading = false;
+        state.items = action.payload;
+      })
+      .addCase(fetchQuotations.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(submitQuotation.fulfilled, (state, action) => {
         state.items.unshift(action.payload);
-      },
-      prepare(payload: Omit<Quotation, "id" | "status" | "submittedAt">) {
-        return {
-          payload: {
-            ...payload,
-            id: `q${Date.now()}`,
-            status: "Submitted" as Quotation["status"],
-            submittedAt: new Date().toISOString(),
-          } as Quotation,
-        };
-      },
-    },
-    setQuotationStatus(state, action: PayloadAction<{ id: string; status: Quotation["status"] }>) {
-      const q = state.items.find((x) => x.id === action.payload.id);
-      if (q) q.status = action.payload.status;
-    },
+      })
+      .addCase(setQuotationStatus.fulfilled, (state, action) => {
+        const q = state.items.find((x) => x.id === action.payload.id);
+        if (q) q.status = action.payload.status;
+      });
   },
 });
 
-export const { submitQuotation, setQuotationStatus } = slice.actions;
+export { submitQuotation, setQuotationStatus };
 export default slice.reducer;
