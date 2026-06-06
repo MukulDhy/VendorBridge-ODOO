@@ -1,0 +1,15 @@
+{"level":"info","message":"Database 'vendorbridge' already exists.","service":"Vendorbridge-server","timestamp":"2026-06-06 17:02:14"}
+{"level":"info","message":"✅ PostgreSQL Connected Successfully","service":"Vendorbridge-server","timestamp":"2026-06-06 17:02:15"}
+{"level":"info","message":"Database Time: Sat Jun 06 2026 17:02:15 GMT+0530 (India Standard Time)","service":"Vendorbridge-server","timestamp":"2026-06-06 17:02:15"}
+{"level":"info","message":"Initializing database tables...","service":"Vendorbridge-server","timestamp":"2026-06-06 17:02:15"}
+{"level":"info","message":"✅ Vendors table created","service":"Vendorbridge-server","timestamp":"2026-06-06 17:02:15"}
+{"level":"info","message":"✅ Users table created","service":"Vendorbridge-server","timestamp":"2026-06-06 17:02:15"}
+{"level":"info","message":"✅ RFQs table created","service":"Vendorbridge-server","timestamp":"2026-06-06 17:02:15"}
+{"level":"info","message":"✅ RFQ Vendors junction table created","service":"Vendorbridge-server","timestamp":"2026-06-06 17:02:15"}
+{"level":"info","message":"✅ Quotations table created","service":"Vendorbridge-server","timestamp":"2026-06-06 17:02:15"}
+{"level":"info","message":"✅ Approvals table created","service":"Vendorbridge-server","timestamp":"2026-06-06 17:02:15"}
+{"level":"info","message":"✅ Purchase Orders table created","service":"Vendorbridge-server","timestamp":"2026-06-06 17:02:15"}
+{"level":"info","message":"✅ Invoices table created","service":"Vendorbridge-server","timestamp":"2026-06-06 17:02:15"}
+{"level":"info","message":"✅ Notifications table created","service":"Vendorbridge-server","timestamp":"2026-06-06 17:02:15"}
+{"level":"info","message":"✅ Activity Logs table created","service":"Vendorbridge-server","timestamp":"2026-06-06 17:02:15"}
+{"level":"info","message":"✅ PostgreSQL initialization completed","service":"Vendorbridge-server","timestamp":"2026-06-06 17:02:15"}

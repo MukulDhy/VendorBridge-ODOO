@@ -98,7 +98,7 @@ const buildAuthPayload = (user, accessToken, refreshToken) => ({
 // ─── POST /api/v1/auth/register ───────────────────────────────────────────────
 export const register = async (req, res) => {
   try {
-    const data = registerSchema.parse(req.body);
+    const data = req.body;
 
     // was: User.findOne({ email: data.email })
     const existing = await findUserByEmail(data.email);
