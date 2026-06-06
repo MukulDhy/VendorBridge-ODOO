@@ -30,8 +30,8 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="grid min-h-screen lg:grid-cols-2">
-      <div className="relative hidden flex-col justify-between overflow-hidden bg-[var(--gradient-primary)] p-12 text-primary-foreground lg:flex">
+    <div className="grid min-h-screen lg:grid-cols-2 bg-foreground">
+      <div className="relative hidden flex-col justify-between overflow-hidden bg-[--gradient-primary] p-12 text-primary-foreground lg:flex">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/15 backdrop-blur">
             <Building2 className="h-5 w-5" />
@@ -61,18 +61,18 @@ export default function LoginPage() {
         <div className="w-full max-w-md">
           <div className="mb-8 lg:hidden">
             <div className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[var(--gradient-primary)] text-primary-foreground">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[--gradient-primary] text-primary-foreground">
                 <Building2 className="h-5 w-5" />
               </div>
-              <span className="text-lg font-semibold tracking-tight text-foreground">VendorBridge</span>
+              <span className="text-lg font-semibold tracking-tight text-primary-foreground">VendorBridge</span>
             </div>
           </div>
-          <h2 className="text-2xl font-semibold tracking-tight text-foreground">Welcome back</h2>
+          <h2 className="text-2xl font-semibold tracking-tight text-primary-foreground">Welcome back</h2>
           <p className="mt-1 text-sm text-muted-foreground">Sign in to continue to your workspace.</p>
 
           <form onSubmit={onSubmit} className="mt-8 space-y-4">
             <div>
-              <label className="text-sm font-medium text-foreground">Email</label>
+              <label className="text-sm font-medium text-primary-foreground">Email</label>
               <input
                 type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
                 className="mt-1 h-11 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none ring-primary/30 focus:ring-2"
