@@ -65,7 +65,7 @@ export const protect = async (req, res, next) => {
   }
 };
 
-// Grant access to specific roles
+// Generic role guard: authorize('admin', 'officer')
 export const authorize = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
@@ -78,6 +78,29 @@ export const authorize = (...roles) => {
   };
 };
 
+// Vendor-specific guard — JWT must carry vendorId
+export const requireVendor = (req, res, next) => {
+  if (!req.user?.vendorId) {
+    return res.status(403).json({
+      success: false,
+      message: "Vendor access required",
+      errorCode: 4,
+    });
+  }
+  next();
+};
+
+// Procurement officer guard
+export const requireOfficer = (req, res, next) => {
+  if (req.user?.role !== "officer") {
+    return res.status(403).json({
+      success: false,
+      message: "Procurement officer access required",
+      errorCode: 4,
+    });
+  }
+  next();
+};
 // Check if user is email verified
 export const requireEmailVerification = (req, res, next) => {
   if (!req.user.isEmailVerified) {
@@ -161,3 +184,5 @@ export const adminSpecialAuth = async (req, res, next) => {
     });
   }
 };
+
+
