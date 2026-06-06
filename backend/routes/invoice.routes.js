@@ -13,7 +13,7 @@ router.use(protect);
 
 router.get("/", getInvoices);
 router.get("/:id", getInvoice);
-router.post("/", authorize("ADMIN", "PROCUREMENT_OFFICER", "VENDOR"), addInvoice);
+router.post("/", authorize("ADMIN", "PROCUREMENT_OFFICER", "VENDOR", "MANAGER"), addInvoice);
 router.patch("/:id/status", authorize("ADMIN", "PROCUREMENT_OFFICER"), changeInvoiceStatus);
 
 export default router;

@@ -26,25 +26,38 @@ export default function ApprovalsPage() {
 
   const list = approvals.filter((a) => a.status === tab);
 
-  const approve = (id: string) => {
+  const approve = async (id: string) => {
     const a = approvals.find((x) => x.id === id)!;
     const q = quotations.find((x) => x.id === a.quotationId)!;
     const r = rfqs.find((x) => x.id === a.rfqId)!;
-    dispatch(decideApproval({ id, status: "Approved", approverId: user.id }));
+    dispatch(decideApproval({ id, status: "Approved", remarks: "Approved" }));
     dispatch(setQuotationStatus({ id: q.id, status: "Awarded" }));
     dispatch(updateRFQStatus({ id: r.id, status: "Awarded" }));
-    const poAction = createPO({ rfqId: r.id, quotationId: q.id, vendorId: q.vendorId, items: [{ name: r.title, qty: r.quantity, price: q.price }], taxRate: 18 });
-    dispatch(poAction);
-    const poId = (poAction.payload as any).id;
-    const total = q.price * r.quantity * 1.18;
-    dispatch(createInvoice({ poId, vendorId: q.vendorId, amount: total, taxRate: 18, dueDate: new Date(Date.now() + 30 * 86400000).toISOString() }));
-    dispatch(logActivity({ userId: user.id, action: "APPROVE_RFQ", entityType: "Approval", entityId: id }));
-    dispatch(pushNotification({ userId: "u2", title: "Approval Granted", message: `${r.code} approved by ${user.name}. PO generated.`, link: "/purchase-orders" }));
-    navigate("/purchase-orders");
+    try {
+      const po = await dispatch(
+        createPO({
+          rfqId: r.id,
+          quotationId: q.id,
+          vendorId: q.vendorId,
+          items: [{ name: r.title, qty: r.quantity, price: q.price }],
+          taxRate: 18,
+        })
+      ).unwrap();
+      const poId = po.id;
+      const total = q.price * r.quantity * 1.18;
+      dispatch(createInvoice({ poId, vendorId: q.vendorId, amount: total, taxRate: 18, dueDate: new Date(Date.now() + 30 * 86400000).toISOString() }));
+      dispatch(logActivity({ userId: user.id, action: "APPROVE_RFQ", entityType: "Approval", entityId: id }));
+      dispatch(pushNotification({ userId: "u2", title: "Approval Granted", message: `${r.code} approved by ${user.name}. PO generated.`, link: "/purchase-orders" }));
+      navigate("/purchase-orders");
+    } catch (err) {
+      console.error("Failed to approve RFQ / create PO:", err);
+    }
   };
 
   const reject = (id: string) => {
-    dispatch(decideApproval({ id, status: "Rejected", approverId: user.id, remarks: "Rejected by approver." }));
+    const a = approvals.find((x) => x.id === id)!;
+    dispatch(decideApproval({ id, status: "Rejected", remarks: "Rejected by approver." }));
+    dispatch(setQuotationStatus({ id: a.quotationId, status: "Rejected" }));
     dispatch(logActivity({ userId: user.id, action: "REJECT_APPROVAL", entityType: "Approval", entityId: id }));
   };
 

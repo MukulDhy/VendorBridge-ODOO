@@ -193,7 +193,7 @@ export async function initDatabase(pool) {
     logger.info("✅ Activity Logs table created");
 
     // Seed database
-    //await seedDatabase(pool);
+    await seedDatabase(pool);
 
   } catch (error) {
     logger.error(`❌ Table creation failed: ${error.message}`);
@@ -226,9 +226,9 @@ async function seedDatabase(pool) {
 
     // 2. Seed Users (a1-a5 prefix)
     const uSeeds = [
-      { id: 'a1111111-1111-1111-1111-111111111111', name: 'Aarav Mehta', email: 'admin@vendorbridge.io', role: 'ADMIN', password: 'admin123', is_email_verified: true },
-      { id: 'a2222222-2222-2222-2222-222222222222', name: 'Priya Sharma', email: 'officer@vendorbridge.io', role: 'PROCUREMENT_OFFICER', password: 'officer123', is_email_verified: true },
-      { id: 'a3333333-3333-3333-3333-333333333333', name: 'Rohan Kapoor', email: 'manager@vendorbridge.io', role: 'MANAGER', password: 'manager123', is_email_verified: true },
+      { id: 'a1111111-1111-1111-1111-111111111111', name: 'Mukul Dahiya', email: 'admin@vendorbridge.io', role: 'ADMIN', password: 'admin123', is_email_verified: true },
+      { id: 'a2222222-2222-2222-2222-222222222222', name: 'vishal', email: 'officer@vendorbridge.io', role: 'PROCUREMENT_OFFICER', password: 'officer123', is_email_verified: true },
+      { id: 'a3333333-3333-3333-3333-333333333333', name: 'aksh', email: 'manager@vendorbridge.io', role: 'MANAGER', password: 'manager123', is_email_verified: true },
       { id: 'a4444444-4444-4444-4444-444444444444', name: 'Dell India Pvt Ltd', email: 'vendor@dell.com', role: 'VENDOR', password: 'vendor123', vendor_id: 'd1111111-1111-1111-1111-111111111111', is_email_verified: true },
       { id: 'a5555555-5555-5555-5555-555555555555', name: 'HP Enterprises', email: 'vendor@hp.com', role: 'VENDOR', password: 'vendor123', vendor_id: 'd2222222-2222-2222-2222-222222222222', is_email_verified: true }
     ];

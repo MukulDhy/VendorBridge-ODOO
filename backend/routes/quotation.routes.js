@@ -14,6 +14,6 @@ router.use(protect);
 router.get("/", getQuotations);
 router.get("/:id", getQuotation);
 router.post("/", authorize("ADMIN", "VENDOR"), addQuotation);
-router.patch("/:id/status", authorize("ADMIN", "PROCUREMENT_OFFICER"), changeQuotationStatus);
+router.patch("/:id/status", authorize("ADMIN", "PROCUREMENT_OFFICER", "MANAGER"), changeQuotationStatus);
 
 export default router;

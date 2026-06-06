@@ -17,17 +17,27 @@ export default function RFQCreatePage() {
   const [assigned, setAssigned] = useState<string[]>([]);
   const toggle = (id: string) => setAssigned((a) => (a.includes(id) ? a.filter((x) => x !== id) : [...a, id]));
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const action = addRFQ({ ...form, assignedVendors: assigned, createdBy: user.id, deadline: new Date(form.deadline).toISOString() });
-    dispatch(action);
-    const newId = (action.payload as any).id;
-    dispatch(logActivity({ userId: user.id, action: "CREATE_RFQ", entityType: "RFQ", entityId: newId }));
-    assigned.forEach((vid) => {
-      const vu = vendors.find((v) => v.id === vid);
-      if (vu) dispatch(pushNotification({ userId: `u-vendor-${vid}`, title: "New RFQ Assigned", message: `${form.title} — please submit your quotation.`, link: `/vendor/rfqs` }));
-    });
-    navigate(`/rfqs/${newId}`);
+    try {
+      const rfq = await dispatch(
+        addRFQ({
+          ...form,
+          assignedVendors: assigned,
+          createdBy: user.id,
+          deadline: new Date(form.deadline).toISOString(),
+        })
+      ).unwrap();
+      const newId = rfq.id;
+      dispatch(logActivity({ userId: user.id, action: "CREATE_RFQ", entityType: "RFQ", entityId: newId }));
+      assigned.forEach((vid) => {
+        const vu = vendors.find((v) => v.id === vid);
+        if (vu) dispatch(pushNotification({ userId: `u-vendor-${vid}`, title: "New RFQ Assigned", message: `${form.title} — please submit your quotation.`, link: `/vendor/rfqs` }));
+      });
+      navigate(`/rfqs/${newId}`);
+    } catch (err) {
+      console.error("Failed to create RFQ:", err);
+    }
   };
 
   return (

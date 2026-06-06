@@ -28,6 +28,7 @@ export const addRFQ = createAsyncThunk<
 >("rfqs/addRFQ", async (payload, { rejectWithValue }) => {
   try {
     const { data } = await api.post("/rfqs", payload);
+    console.log(data);
     return data.data as RFQ;
   } catch (e) {
     return rejectWithValue(extract(e));

@@ -18,6 +18,6 @@ router.get("/:id", getRFQ);
 router.post("/", authorize("ADMIN", "PROCUREMENT_OFFICER"), addRFQ);
 router.put("/:id", authorize("ADMIN", "PROCUREMENT_OFFICER"), editRFQ);
 router.delete("/:id", authorize("ADMIN", "PROCUREMENT_OFFICER"), removeRFQ);
-router.patch("/:id/status", authorize("ADMIN", "PROCUREMENT_OFFICER"), changeRFQStatus);
+router.patch("/:id/status", authorize("ADMIN", "PROCUREMENT_OFFICER", "MANAGER"), changeRFQStatus);
 
 export default router;

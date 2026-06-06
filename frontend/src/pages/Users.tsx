@@ -45,7 +45,7 @@ export default function UsersPage() {
       </div>
       {open && (
         <Invite onClose={() => setOpen(false)} onCreate={(payload) => {
-          dispatch(addUser({ id: `u${Date.now()}`, ...payload }));
+          dispatch(addUser(payload));
           setOpen(false);
         }} />
       )}

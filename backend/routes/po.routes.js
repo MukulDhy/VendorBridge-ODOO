@@ -13,7 +13,7 @@ router.use(protect);
 
 router.get("/", getPOs);
 router.get("/:id", getPO);
-router.post("/", authorize("ADMIN", "PROCUREMENT_OFFICER"), addPO);
+router.post("/", authorize("ADMIN", "PROCUREMENT_OFFICER", "MANAGER"), addPO);
 router.patch("/:id/status", authorize("ADMIN", "PROCUREMENT_OFFICER", "VENDOR"), changePOStatus);
 
 export default router;
