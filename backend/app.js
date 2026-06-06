@@ -7,6 +7,7 @@ import bodyParser from "body-parser";
 import config from "./config/config.js";
 import http from "http";
 import connectDB from "./config/db.js";
+import { initializeDatabase } from "./config/initDB.js";
 import logger from "./utils/logger.js";
 import compression from "compression";
 import errorHandler from "./middlewares/error.js";
@@ -27,7 +28,8 @@ const app = express();
 const server = http.createServer(app);
 
 // Connect to database
-connectDB();
+await connectDB();
+await initializeDatabase();
 configCloudinary();
 // Middleware
 app.use(express.json({ limit: "50mb" }));

@@ -1,28 +1,34 @@
-import colors from "colors";
-import mongoose from "mongoose";
 import logger from "../utils/logger.js";
+import pg from "pg";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const { Pool } = pg;
+
+export const pool = new Pool({
+  host: process.env.DB_HOST,
+  port: Number(process.env.DB_PORT),
+  database: process.env.DB_NAME,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+});
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await pool.query("SELECT NOW()");
 
-    logger.info(`DataBase is Connected to Server ${process.env.PORT} and ${conn.connection.host}:${conn.connection.port}`);
-    // console.log(
-    //   `DataBase is Connected to Server ${process.env.PORT} and ${conn.connection.host}:${conn.connection.port}`
-    //     .underline.bgBlue
-    // );
-    return conn;
+    logger.info(
+      `PostgreSQL Connected to ${process.env.DB_NAME}`
+    );
+
+    return pool;
   } catch (error) {
-    logger.error(`Error connecting to MongoDB: ${error.message}`);
-    // console.log(`Error Occured : ${error.message}`.underline.bgRed);
-    if (process.env.NODE_ENV !== "test") {
-      process.exit(1);
-    } else {
-      throw error; // in test just throw so jest can catch it
-    }
+    logger.error(
+      `PostgreSQL Connection Error: ${error.message}`
+    );
+
+    process.exit(1);
   }
 };
 

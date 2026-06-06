@@ -12,7 +12,7 @@ import {
   resetPassword,
   changePassword,
   refreshToken,
-  checkEmail,
+  checkEmail,   
 } from "../controllers/auth.controller.js";
 import { protect, requireEmailVerification } from "../middlewares/auth.js";
 
